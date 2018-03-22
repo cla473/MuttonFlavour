@@ -1,0 +1,44 @@
+---
+title: "Mutton Flavour Analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Week 3 - Data Visualisation Exercise 1. 
+
+# Background Information
+
+Fatty acids including MOA, EOA and MNA accumulate in lamb meat and can make meat from older animals taste unpleasant. Another fatty acid, C17:0, also accumlates with age although is not responsible for the unpleasant 'mutton flavour'. C17 is easier to measure than MOA, EOA or MNA; this study investigates whether C17 could be a useful 'proxy' for indicating how 'muttony' meat is likely to taste. 
+
+
+#Processes
+
+1. Add the required libraries
+```{r echo=FALSE}
+library(tidyverse)
+```
+
+2. Import the data
+
+```{r echo=FALSE}
+flavourData <- read_csv("../rawData/bcfa_C17_fa.csv")
+```
+
+3. View the data
+```{r echo=FALSE}
+str(flavourData)
+head(flavourData)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
