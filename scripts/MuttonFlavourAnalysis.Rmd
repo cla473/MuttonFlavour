@@ -23,22 +23,92 @@ library(tidyverse)
 
 2. Import the data
 
-```{r echo=FALSE}
+```{r }
 flavourData <- read_csv("../rawData/bcfa_C17_fa.csv")
 ```
 
 3. View the data
-```{r echo=FALSE}
+```{r }
 str(flavourData)
 head(flavourData)
 ```
 
-## Including Plots
+#Visualising the data
+In this instance I want to see how the fatty acid levels compare within each sample.  To do this, I will need to add an observation Id (obsId) and then tidy the data
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r }
+tidyFlavour <- flavourData %>% 
+  mutate(obsId = 1:n()) %>% 
+  gather("FattyAcids", "value", 1:4)
+tidyFlavour
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+And now we can plot the data.  This will be a large (horizontal) chart
+
+```{r }
+ggplot(tidyFlavour, aes(x=obsId, y=value, colour=FattyAcids)) +
+  geom_point()
+```
+
+#Observation regarding this data:
+MOA observations are very diverse, with some really high values, not sure if this indicates an issue with the observations or not
+C17.0 is, in most instances the lowest value, but not always, not sure if this indicates an issue with the observations or not
+Do we get a different picture if we filter by the year
+
+```{r }
+ggplot(tidyFlavour, aes(x=obsId, y=value, colour=FattyAcids)) +
+  geom_point() +
+  facet_grid(Year ~ .)
+```
+
+This shows a lot of samples in 2011, but very few in 2014.  Lets look of the 'make up' of the data.
+
+```{r }
+tidyFlavour %>% count(Year)
+flavourData %>% count(MOA > MNA)
+flavourData %>% count(MNA > EOA)
+flavourData %>% count(EOA > C17.0)
+```
+
+I would question the validity of the samples where EOA is less than C17.0.  Now to look at the distribution of the values
+
+```{r }
+ggplot(tidyFlavour, aes(x=FattyAcids, y=value)) +
+  geom_boxplot() +
+  facet_grid(~Year)
+```
+
+This supports the graph displayed above.  Now I will compare the variables against each other
+
+```{r }
+ggplot(flavourData, aes(x=MOA, y=MNA, colour=as.factor(Year))) +
+  geom_point() + 
+  geom_smooth(method='lm', se=FALSE) 
+
+ggplot(flavourData, aes(x=MOA, y=EOA, colour=as.factor(Year))) +
+  geom_point() + 
+  geom_smooth(method='lm', se=FALSE) 
+
+ggplot(tidyFlavour, aes(x=MOA, colour=as.factor(Year))) +
+  geom_point() + 
+  geom_smooth(method='lm', se=FALSE) 
+
+
+```
+
+We will have a look at the individual stats
+```{r }
+fit_MOA_MNA <- lm(MOA ~ MNA, data=flavourData)
+
+
+summary(fit_MOA_MNA)
+```
+
+
+```{r }
+library(broom)
+fit_MOA_MNA.df <- tidy(fit_MOA_MNA) %>% 
+  filter(term == "MNA")
+fit_MOA_MNA.df
+```
+
