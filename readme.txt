@@ -1,1 +1,4 @@
-This is a test document to get git working
+Before running the Rmd file to create the output, the raw data will need to be download from 
+
+https://confluence.csiro.au/download/attachments/571015571/bcfa_C17_fa.csv?version=1&modificationDate=1521545267220&api=v2
+
