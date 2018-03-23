@@ -89,19 +89,24 @@ ggplot(flavourData, aes(x=MOA, y=EOA, colour=as.factor(Year))) +
   geom_point() + 
   geom_smooth(method='lm', se=FALSE) 
 
-ggplot(tidyFlavour, aes(x=MOA, colour=as.factor(Year))) +
+ggplot(flavourData, aes(x=MOA, y=C17.0, colour=as.factor(Year))) +
   geom_point() + 
   geom_smooth(method='lm', se=FALSE) 
-
 
 ```
 
 We will have a look at the individual stats
 ```{r }
 fit_MOA_MNA <- lm(MOA ~ MNA, data=flavourData)
-
-
 summary(fit_MOA_MNA)
+cor.test(x=flavourData$MOA, y=flavourData$MNA, method="pearso")
+
+fit_MOA_MNA <- lm(MOA ~ MNA, data=flavourData)
+summary(fit_MOA_MNA)
+
+fit_MOA_MNA <- lm(MOA ~ MNA, data=flavourData)
+summary(fit_MOA_MNA)
+
 ```
 
 
